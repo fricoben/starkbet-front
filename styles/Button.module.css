@@ -1,0 +1,20 @@
+.customBtn {
+  color: white;
+  border-radius: 5px;
+  padding: 10px 25px;
+  font-weight: 500;
+  background: #ff5008;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: relative;
+  display: inline-block;
+  box-shadow: 7px 7px 20px 0px black;
+  outline: none;
+  text-transform: uppercase;
+  margin-top: 2rem;
+}
+
+.customBtn:hover {
+  color: #ff5008;
+  background: white;
+}
