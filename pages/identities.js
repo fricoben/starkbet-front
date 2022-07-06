@@ -32,6 +32,8 @@ export default function Identities() {
 
   //Contract
   const { contract } = useStarknetIdContract();
+
+  //Mint
   const {
     data: mintData,
     invoke,

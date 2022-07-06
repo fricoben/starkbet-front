@@ -15,6 +15,7 @@ import ErrorScreen from "../components/errorScreen";
 import LoadingScreen from "../components/loadingScreen";
 import { useStarknetIdContract } from "../hooks/starknetId";
 import { stringToFelt } from "../utils/felt";
+import SuccessScreen from "../components/successScreen";
 
 export default function Discord() {
   const router = useRouter();
@@ -35,7 +36,7 @@ export default function Discord() {
   const { contract } = useStarknetIdContract();
 
   //GetData
-  const { data: getDataData, error: getDataDataError } = useStarknetCall({
+  const { data: discordId, error: discordIdError } = useStarknetCall({
     contract: contract,
     method: "get_data",
     args: [[tokenId, 0], stringToFelt("discord")],
@@ -43,15 +44,16 @@ export default function Discord() {
 
   //SetData
   const {
-    data: setDiscordData,
+    data: discordIdSetterData,
     invoke,
-    error: setDataError,
+    error: discordIdSetterError,
   } = useStarknetInvoke({
     contract: contract,
     method: "set_data",
   });
-  const [stateSetDataPossibility, setDataPossibility] = useState(undefined);
-  const [setDataSuccess, setsetDataSuccess] = useState("false");
+  const [discordIdSetterPossibility, setDiscordIdSetterPossibility] =
+    useState(undefined);
+  const [discordIdSetterSuccess, setDiscordIdSetterSuccess] = useState(false);
   const { transactions } = useStarknetTransactionManager();
 
   //Server POST request
@@ -63,17 +65,22 @@ export default function Discord() {
     isConnected &&
     (startProcessData?.status === "error" ||
       verifyData?.status === "error" ||
-      getDataDataError ||
-      setDataError);
+      discordIdError ||
+      discordIdSetterError);
+
+  const successScreenCondition =
+    isConnected && verifyData?.status === "success";
 
   const loadingScreenCondition =
     isConnected &&
     !errorScreenCondition &&
-    (!startProcessData ||
-      !getDataData ||
-      setDataSuccess === "loading" ||
-      (!verifyData && setDataSuccess));
+    !successScreenCondition &&
+    !discordIdSetterPossibility;
 
+  const discordIdSetterScreen =
+    isConnected && discordIdSetterPossibility && !errorScreenCondition;
+
+  //Fonctions
   function generateRandomString() {
     let returnString = "";
 
@@ -90,19 +97,35 @@ export default function Discord() {
     });
   }
 
+  //Set reference only one time
   const [reference, setReference] = useState(undefined);
   useEffect(() => {
-    setReference(generateRandomString())
-  }, [])
+    setReference(generateRandomString());
+  }, []);
 
   const [code, setCode] = useState(undefined);
   useEffect(() => {
-    setCode(router.query.code)
-  }, [router])
+    setCode(router.query.code);
+  }, [router]);
 
+  //console.logs
   useEffect(() => {
-    if (!reference || !code)
-      return;
+    console.log("startProcessData", startProcessData);
+    console.log("discordId", discordId?.toString());
+    console.log("discordIdSetterPossibility", discordIdSetterPossibility);
+    console.log("discordIdSetterSuccess", discordIdSetterSuccess);
+    console.log("verifyData", verifyData);
+  }, [
+    startProcessData,
+    discordId,
+    discordIdSetterPossibility,
+    discordIdSetterSuccess,
+    verifyData,
+  ]);
+
+  //First server request
+  useEffect(() => {
+    if (!reference || !code) return;
 
     const requestOptions = {
       method: "POST",
@@ -116,40 +139,42 @@ export default function Discord() {
     fetch("https://verify.starknet.id/start_process", requestOptions)
       .then((response) => response.json())
       .then((data) => setStartProcessData(data));
-  }, [code, reference])
+  }, [code, reference]);
 
+  //Connection verification
   useEffect(() => {
     if (!account) {
       setIsConnected(false);
     } else {
       setIsConnected(true);
     }
-  }, [account])
+  }, [account]);
 
+  //First server request verification
   useEffect(() => {
-
     if (
-      getDataData &&
-      startProcessData?.status === "succes" &&
-      startProcessData.id != getDataData.toString()
+      discordId &&
+      startProcessData?.status === "success" &&
+      startProcessData.id != discordId.toString() &&
+      discordIdSetterSuccess !== "loading"
     ) {
-      setDataPossibility(true);
+      setDiscordIdSetterPossibility(true);
     } else if (
-      getDataData &&
-      startProcessData?.status === "succes" &&
-      startProcessData.id === getDataData.toString()
+      discordId &&
+      startProcessData?.status === "success" &&
+      startProcessData.id.toString() === discordId.toString()
     ) {
-      setsetDataSuccess("true");
+      setDiscordIdSetterSuccess(true);
     }
+  }, [discordId, startProcessData]);
 
-  }, [getDataData, startProcessData])
-
+  //Verification server request
   useEffect(() => {
-    if (setDataSuccess === "true") {
+    if (discordIdSetterSuccess) {
       const requestOptions = {
         method: "POST",
         body: JSON.stringify({
-          reference: reference, //le invalid reference est peut etre le pb
+          reference: reference,
           type: "discord",
           nftid: tokenId,
         }),
@@ -159,26 +184,23 @@ export default function Discord() {
         .then((response) => response.json())
         .then((data) => setVerifyData(data));
     }
-  }, [setDataSuccess])
+  }, [discordIdSetterSuccess]);
 
   useEffect(() => {
     for (const transaction of transactions)
-      if (transaction.transactionHash === setDiscordData) {
+      if (transaction.transactionHash === discordIdSetterData) {
         if (transaction.status === "TRANSACTION_RECEIVED") {
-          setDataPossibility("false");
-          setsetDataSuccess("loading");
+          setDiscordIdSetterPossibility(false);
+          setDiscordIdSetterSuccess("loading");
         }
         if (
           transaction.status === "ACCEPTED_ON_L2" ||
           transaction.status === "ACCEPTED_ON_L1"
         ) {
-          setsetDataSuccess("true");
+          setDiscordIdSetterSuccess(true);
         }
       }
-  }, [
-    setDiscordData,
-    transactions,
-  ]);
+  }, [discordIdSetterData, transactions]);
 
   return (
     <div className="h-screen w-screen">
@@ -205,11 +227,18 @@ export default function Discord() {
         {loadingScreenCondition && <LoadingScreen />}
         {errorScreenCondition && (
           <ErrorScreen
-            onClick={() => router.push("identities")}
+            onClick={() => router.push(`/identities/${tokenId}`)}
             errorButton="Retry to connect"
           />
         )}
-        {isConnected && stateSetDataPossibility && (
+        {successScreenCondition && (
+          <SuccessScreen
+            onClick={() => router.push(`/identities/${tokenId}`)}
+            successHelp="Get back to you starknet identity"
+            successMessage="What a chad, you're discord is verified !"
+          />
+        )}
+        {discordIdSetterScreen && (
           <>
             <h1 className="sm:text-5xl text-5xl mt-4">
               It&apos;s time to set your discord infos anon !
@@ -223,8 +252,3 @@ export default function Discord() {
     </div>
   );
 }
-//   <SuccessScreen
-//     onClick={() => router.push("identities")}
-//     successHelp="Let's verify it now !"
-//     successMessage="What a chad, you're discord is connected !"
-//   />

@@ -1,14 +1,15 @@
-import React from "react";
+import React, { useState } from "react";
 import Head from "next/head";
 import styles from "../../styles/Identities.module.css";
-import { useStarknet } from "@starknet-react/core";
+import { useStarknet, useStarknetCall } from "@starknet-react/core";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Button from "../../components/button";
-
 import ClickableIcon from "../../components/clickableIcon";
 import Image from "next/image";
 import { GoVerified, GoUnverified } from "react-icons/go";
+import { useStarknetIdContract } from "../../hooks/starknetId";
+import { stringToFelt } from "../../utils/felt";
 
 export default function TokenId() {
   const router = useRouter();
@@ -19,6 +20,15 @@ export default function TokenId() {
     "..." +
     router.query.tokenId.charAt(router.query.tokenId.length - 2) +
     router.query.tokenId.charAt(router.query.tokenId.length - 1);
+
+  //Contract calls
+  const { contract } = useStarknetIdContract();
+  const { data: isValidData, error: isValidError } = useStarknetCall({
+    contract: contract,
+    method: "is_valid",
+    args: [[router.query.tokenId, 0], stringToFelt("discord"), account],
+  });
+  const [isValidDiscord, setIsValidDiscord] = useState(false);
 
   function onDiscordClick() {
     sessionStorage.setItem("tokenId", router.query.tokenId);
@@ -39,6 +49,14 @@ export default function TokenId() {
       router.push("/home");
     }
   }, [account, router]);
+
+  useEffect(() => {
+    if (isValidError || !isValidData || Number(isValidData) === 0) {
+      setIsValidDiscord(false);
+    } else {
+      setIsValidDiscord(true);
+    }
+  }, [isValidData, isValidError]);
 
   return (
     <div className="h-screen w-screen">
@@ -76,8 +94,17 @@ export default function TokenId() {
           <div className="m-3">
             <ClickableIcon icon="discord" onClick={onDiscordClick} />
             <div className="flex justify-center items-center">
-              <p className="mt-1 mr-1 font-bold">Discord Username</p>
-              <GoVerified color="#FF5008" />
+              {isValidDiscord ? (
+                <>
+                  <p className="mt-1 mr-1 font-bold">Verified</p>
+                  <GoVerified color="#FF5008" />
+                </>
+              ) : (
+                <>
+                  <p className="mt-1 mr-1 font-bold">Unverified</p>
+                  <GoUnverified color="#FF5008" />
+                </>
+              )}
             </div>
           </div>
         </div>
