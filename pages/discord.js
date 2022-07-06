@@ -12,7 +12,6 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Button from "../components/button";
 import ErrorScreen from "../components/errorScreen";
-import SuccessScreen from "../components/successScreen";
 import LoadingScreen from "../components/loadingScreen";
 import { useStarknetIdContract } from "../hooks/starknetId";
 import { stringToFelt } from "../utils/felt";
@@ -52,7 +51,7 @@ export default function Discord() {
     method: "set_data",
   });
   const [stateSetDataPossibility, setDataPossibility] = useState(undefined);
-  const [SetDataSuccess, setSetDataSuccess] = useState("false");
+  const [setDataSuccess, setsetDataSuccess] = useState("false");
   const { transactions } = useStarknetTransactionManager();
 
   //Server POST request
@@ -72,8 +71,8 @@ export default function Discord() {
     !errorScreenCondition &&
     (!startProcessData ||
       !getDataData ||
-      SetDataSuccess === "loading" ||
-      (!verifyData && SetDataSuccess));
+      setDataSuccess === "loading" ||
+      (!verifyData && setDataSuccess));
 
   function generateRandomString() {
     let returnString = "";
@@ -91,90 +90,94 @@ export default function Discord() {
     });
   }
 
+  const [reference, setReference] = useState(undefined);
+  useEffect(() => {
+    setReference(generateRandomString())
+  }, [])
+
+  const [code, setCode] = useState(undefined);
+  useEffect(() => {
+    setCode(router.query.code)
+  }, [router])
+
+  useEffect(() => {
+    if (!reference || !code)
+      return;
+
+    const requestOptions = {
+      method: "POST",
+      body: JSON.stringify({
+        reference: reference,
+        type: "discord",
+        code: code,
+      }),
+    };
+
+    fetch("https://verify.starknet.id/start_process", requestOptions)
+      .then((response) => response.json())
+      .then((data) => setStartProcessData(data));
+  }, [code, reference])
+
   useEffect(() => {
     if (!account) {
       setIsConnected(false);
     } else {
       setIsConnected(true);
+    }
+  }, [account])
 
-      const reference = generateRandomString();
+  useEffect(() => {
 
-      if (!startProcessData) {
-        const requestOptions = {
-          method: "POST",
-          body: JSON.stringify({
-            reference: reference,
-            type: "discord",
-            code: router.query.code,
-          }),
-        };
-
-        fetch("https://verify.starknet.id/start_process", requestOptions)
-          .then((response) => response.json())
-          .then((data) => setStartProcessData(data));
-      }
-
-      if (
-        getDataData &&
-        startProcessData?.status === "succes" &&
-        startProcessData.id != getDataData.toString()
-      ) {
-        setDataPossibility(true);
-      } else if (
-        getDataData &&
-        startProcessData &&
-        startProcessData.id === getDataData.toString()
-      ) {
-        setSetDataSuccess("true");
-      }
-
-      if (SetDataSuccess === "true") {
-        const requestOptions = {
-          method: "POST",
-          body: JSON.stringify({
-            reference: reference, //le invalid reference est peut etre le pb
-            type: "discord",
-            nftid: tokenId,
-          }),
-        };
-
-        fetch("https://verify.starknet.id/verify", requestOptions)
-          .then((response) => response.json())
-          .then((data) => setVerifyData(data));
-      }
-
-      for (const transaction of transactions)
-        if (transaction.transactionHash === setDiscordData) {
-          if (transaction.status === "TRANSACTION_RECEIVED") {
-            setDataPossibility("false");
-            setSetDataSuccess("loading");
-          }
-          if (
-            transaction.status === "ACCEPTED_ON_L2" ||
-            transaction.status === "ACCEPTED_ON_L1"
-          ) {
-            setSetDataSuccess("true");
-          }
-        }
+    if (
+      getDataData &&
+      startProcessData?.status === "succes" &&
+      startProcessData.id != getDataData.toString()
+    ) {
+      setDataPossibility(true);
+    } else if (
+      getDataData &&
+      startProcessData?.status === "succes" &&
+      startProcessData.id === getDataData.toString()
+    ) {
+      setsetDataSuccess("true");
     }
 
-    console.log("startProcessData", startProcessData);
-    console.log("getDataData", getDataData);
-    console.log("stateSetDataPossibility", stateSetDataPossibility);
-    console.log("setDiscordData", setDiscordData);
-    console.log("SetDataSuccess", SetDataSuccess);
-    console.log("verifyData", verifyData);
+  }, [getDataData, startProcessData])
+
+  useEffect(() => {
+    if (setDataSuccess === "true") {
+      const requestOptions = {
+        method: "POST",
+        body: JSON.stringify({
+          reference: reference, //le invalid reference est peut etre le pb
+          type: "discord",
+          nftid: tokenId,
+        }),
+      };
+
+      fetch("https://verify.starknet.id/verify", requestOptions)
+        .then((response) => response.json())
+        .then((data) => setVerifyData(data));
+    }
+  }, [setDataSuccess])
+
+  useEffect(() => {
+    for (const transaction of transactions)
+      if (transaction.transactionHash === setDiscordData) {
+        if (transaction.status === "TRANSACTION_RECEIVED") {
+          setDataPossibility("false");
+          setsetDataSuccess("loading");
+        }
+        if (
+          transaction.status === "ACCEPTED_ON_L2" ||
+          transaction.status === "ACCEPTED_ON_L1"
+        ) {
+          setsetDataSuccess("true");
+        }
+      }
   }, [
-    account,
-    router,
-    startProcessData,
-    getDataData,
     setDiscordData,
     transactions,
-    tokenId,
-    SetDataSuccess,
-    verifyData,
-    stateSetDataPossibility,
   ]);
 
   return (
