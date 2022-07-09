@@ -153,6 +153,7 @@ export default function Discord() {
     ) {
       setDiscordIdSetterSuccess(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [discordId, startProcessData]);
 
   //Verification server request
@@ -171,6 +172,7 @@ export default function Discord() {
         .then((response) => response.json())
         .then((data) => setVerifyData(data));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [discordIdSetterSuccess]);
 
   useEffect(() => {
