@@ -35,7 +35,7 @@ export default function TokenId() {
     args: [
       [router.query.tokenId, 0],
       stringToFelt("discord"),
-      "0x007bECf86Ed10ca16B34d6D36552269745d28C76c30cf0F683da7252Da14C038",
+      process.env.NEXT_PUBLIC_VERIFIER,
     ],
   });
   const [isValidDiscord, setIsValidDiscord] = useState(false);
