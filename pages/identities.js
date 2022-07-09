@@ -72,7 +72,8 @@ export default function Identities() {
     if (!account) return;
 
     fetch(
-      `http://indexer.starknet.id:8080/fetch_tokens?address=${BigInt(account)}`
+      `http://indexer.starknet.id:8080/fetch_tokens?address=${BigInt(account)}`,
+      { referrerPolicy: "no-referrer-when-downgrade" }
     )
       .then((response) => response.json())
       .then((data) => setOwnedIdentities(data));
