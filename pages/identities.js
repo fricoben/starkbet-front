@@ -10,11 +10,11 @@ import Button from "../components/button";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import IdentitiesGallery from "../components/identitiesGallery";
-import MintIdentity from "../components/mintIdentity";
 import { useStarknetIdContract } from "../hooks/starknetId";
 import ErrorScreen from "../components/errorScreen";
 import SuccessScreen from "../components/successScreen";
 import LoadingScreen from "../components/loadingScreen";
+import MintIdentity from "../components/mintIdentity";
 
 export default function Identities() {
   //React
