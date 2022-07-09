@@ -14,7 +14,7 @@ import { useStarknetIdContract } from "../hooks/starknetId";
 import ErrorScreen from "../components/errorScreen";
 import SuccessScreen from "../components/successScreen";
 import LoadingScreen from "../components/loadingScreen";
-import MintIdentity from "../components/mintIdentity";
+import MintIdentity from "../components/mintOneIdentity";
 
 export default function Identities() {
   //React

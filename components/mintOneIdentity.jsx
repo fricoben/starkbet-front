@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "../styles/Identities.module.css";
 import PlusIcon from "./icons/plusIcon";
 
