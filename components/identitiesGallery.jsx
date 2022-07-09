@@ -3,23 +3,23 @@ import { useRouter } from "next/router";
 import React, { useState } from "react";
 import styles from "../styles/Identities.module.css";
 
-const IdentitiesGallery = ({ identities }) => {
+const IdentitiesGallery = ({ tokenIds }) => {
   const [hoverState, setHoverState] = useState(false);
   const router = useRouter();
 
   return (
     <>
-      {identities.map((identity, index) => (
+      {(tokenIds || []).map((tokenId, index) => (
         <div key={index} className={styles.imageGallery}>
           <Image
             width={150}
             height={150}
-            src={identity?.avatar ?? "/../public/defaultAvatar.jpeg"}
+            src="/../public/defaultAvatar.jpeg"
             alt="avatar"
-            className={!hoverState ? styles.avatar : styles.avatarHover}
+            className={hoverState ? styles.avatarHover : styles.avatar}
             onMouseEnter={() => setHoverState(true)}
             onMouseLeave={() => setHoverState(false)}
-            onClick={() => router.push(`/identities/${identity.tokenId}`)}
+            onClick={() => router.push(`/identities/${tokenId}`)}
           />
         </div>
       ))}

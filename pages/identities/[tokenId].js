@@ -6,27 +6,37 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 import Button from "../../components/button";
 import ClickableIcon from "../../components/clickableIcon";
-import Image from "next/image";
 import { GoVerified, GoUnverified } from "react-icons/go";
 import { useStarknetIdContract } from "../../hooks/starknetId";
 import { stringToFelt } from "../../utils/felt";
+import { MutatingDots } from "react-loader-spinner";
 
 export default function TokenId() {
   const router = useRouter();
   const { account } = useStarknet();
   const tokenIdAbbreviation =
-    router.query.tokenId.charAt(0) +
-    router.query.tokenId.charAt(1) +
-    "..." +
-    router.query.tokenId.charAt(router.query.tokenId.length - 2) +
-    router.query.tokenId.charAt(router.query.tokenId.length - 1);
+    router.query.tokenId?.length > 5
+      ? router.query.tokenId?.charAt(0) +
+        router.query.tokenId?.charAt(1) +
+        "..." +
+        router.query.tokenId?.charAt(router.query.tokenId?.length - 2) +
+        router.query.tokenId?.charAt(router.query.tokenId?.length - 1)
+      : router.query.tokenId;
 
   //Contract calls
   const { contract } = useStarknetIdContract();
-  const { data: isValidData, error: isValidError } = useStarknetCall({
+  const {
+    data: isValidData,
+    error: isValidError,
+    loading,
+  } = useStarknetCall({
     contract: contract,
     method: "is_valid",
-    args: [[router.query.tokenId, 0], stringToFelt("discord"), account],
+    args: [
+      [router.query.tokenId, 0],
+      stringToFelt("discord"),
+      process.env.NEXT_PUBLIC_VERIFIER,
+    ],
   });
   const [isValidDiscord, setIsValidDiscord] = useState(false);
 
@@ -34,13 +44,6 @@ export default function TokenId() {
     sessionStorage.setItem("tokenId", router.query.tokenId);
     window.location.replace(
       "https://discord.com/oauth2/authorize?client_id=991638947451129886&redirect_uri=https%3A%2F%2Fstarknet.id%2Fdiscord&response_type=code&scope=identify"
-    );
-  }
-
-  function onTwitterClick() {
-    sessionStorage.setItem("tokenId", router.query.tokenId);
-    window.location.replace(
-      "https://starknet.id/discord?code=qpC5DFAD2s4UANPu1mo9NqRopvgQiy"
     );
   }
 
@@ -72,29 +75,36 @@ export default function TokenId() {
         </h1>
 
         <div className="flex">
-          {/* <div>
-                <Image
-                  width={150}
-                  height={150}
-                  src="/../../public/defaultAvatar.jpeg"
-                  alt="avatar"
-                  className={styles.avatar}
-                />
-                <p className="mt-1">
-                  <strong>Your avatar</strong>
-                </p>
-              </div> */}
           <div className="m-3">
-            <ClickableIcon icon="twitter" onClick={onTwitterClick} />
+            <ClickableIcon icon="steam" onClick={onDiscordClick} />
             <div className="flex justify-center items-center">
-              <p className="mt-1 mr-1 font-bold">Twitter Username</p>
-              <GoVerified color="#FF5008" />
+              <>
+                <p className="mt-1 mr-1 font-bold">Unverified</p>
+                <GoUnverified color="#FF5008" />
+              </>
+            </div>
+          </div>
+          <div className="m-3">
+            <ClickableIcon icon="twitter" onClick={onDiscordClick} />
+            <div className="flex justify-center items-center">
+              <>
+                <p className="mt-1 mr-1 font-bold">Unverified</p>
+                <GoUnverified color="#FF5008" />
+              </>
             </div>
           </div>
           <div className="m-3">
             <ClickableIcon icon="discord" onClick={onDiscordClick} />
             <div className="flex justify-center items-center">
-              {isValidDiscord ? (
+              {loading ? (
+                <MutatingDots
+                  height="25"
+                  width="25"
+                  color="#ff5008"
+                  secondaryColor="white"
+                  ariaLabel="loading"
+                />
+              ) : isValidDiscord ? (
                 <>
                   <p className="mt-1 mr-1 font-bold">Verified</p>
                   <GoVerified color="#FF5008" />

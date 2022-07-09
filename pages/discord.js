@@ -61,15 +61,16 @@ export default function Discord() {
   const [startProcessData, setStartProcessData] = useState(undefined);
 
   //Screen management
+  const successScreenCondition =
+    isConnected && verifyData?.status === "success";
+
   const errorScreenCondition =
     isConnected &&
+    !successScreenCondition &&
     (startProcessData?.status === "error" ||
       verifyData?.status === "error" ||
       discordIdError ||
       discordIdSetterError);
-
-  const successScreenCondition =
-    isConnected && verifyData?.status === "success";
 
   const loadingScreenCondition =
     isConnected &&
@@ -108,21 +109,6 @@ export default function Discord() {
     setCode(router.query.code);
   }, [router]);
 
-  //console.logs
-  useEffect(() => {
-    console.log("startProcessData", startProcessData);
-    console.log("discordId", discordId?.toString());
-    console.log("discordIdSetterPossibility", discordIdSetterPossibility);
-    console.log("discordIdSetterSuccess", discordIdSetterSuccess);
-    console.log("verifyData", verifyData);
-  }, [
-    startProcessData,
-    discordId,
-    discordIdSetterPossibility,
-    discordIdSetterSuccess,
-    verifyData,
-  ]);
-
   //First server request
   useEffect(() => {
     if (!reference || !code) return;
@@ -152,11 +138,12 @@ export default function Discord() {
 
   //First server request verification
   useEffect(() => {
+    if (discordIdSetterSuccess === "loading") return;
+
     if (
       discordId &&
       startProcessData?.status === "success" &&
-      startProcessData.id != discordId.toString() &&
-      discordIdSetterSuccess !== "loading"
+      startProcessData.id != discordId.toString()
     ) {
       setDiscordIdSetterPossibility(true);
     } else if (
@@ -170,7 +157,7 @@ export default function Discord() {
 
   //Verification server request
   useEffect(() => {
-    if (discordIdSetterSuccess) {
+    if (discordIdSetterSuccess === true) {
       const requestOptions = {
         method: "POST",
         body: JSON.stringify({
@@ -234,7 +221,7 @@ export default function Discord() {
         {successScreenCondition && (
           <SuccessScreen
             onClick={() => router.push(`/identities/${tokenId}`)}
-            successHelp="Get back to you starknet identity"
+            successButton="Get back to you starknet identity"
             successMessage="What a chad, you're discord is verified !"
           />
         )}

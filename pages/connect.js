@@ -14,7 +14,6 @@ export default function Connect() {
 
   useEffect(() => {
     if (!account) {
-      console.log("account", account);
       router.push("/home");
     }
   }, [account, router]);

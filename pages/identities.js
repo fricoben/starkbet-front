@@ -20,10 +20,8 @@ export default function Identities() {
   //React
   const router = useRouter();
   const [minted, setMinted] = useState("false");
-  const queryIdentities = [
-    { discord: "Ben", avatar: undefined, tokenId: "12123" },
-  ];
   const randomTokenId = Math.floor(Math.random() * 100000000);
+  const [ownedIdentities, setOwnedIdentities] = useState(undefined);
 
   // Connection
   const { disconnect, connectors } = useConnectors();
@@ -52,7 +50,6 @@ export default function Identities() {
 
   useEffect(() => {
     if (!account) {
-      console.log("account", account);
       router.push("/home");
     }
 
@@ -68,10 +65,18 @@ export default function Identities() {
           setMinted("true");
         }
       }
-
-    console.log("mintData", mintData);
-    console.log("error", error);
   }, [account, router, contract, mintData, transactions, error]);
+
+  // Get NFTs token ids with indexer
+  useEffect(() => {
+    if (!account) return;
+
+    fetch(
+      `http://indexer.starknet.id:8080/fetch_tokens?address=${BigInt(account)}`
+    )
+      .then((response) => response.json())
+      .then((data) => setOwnedIdentities(data));
+  }, [account]);
 
   return (
     <div className="h-screen w-screen">
@@ -85,7 +90,7 @@ export default function Identities() {
           <>
             <h1 className="sm:text-5xl text-5xl">Your Starknet identities</h1>
             <div className={styles.containerGallery}>
-              <IdentitiesGallery identities={queryIdentities} />
+              <IdentitiesGallery tokenIds={ownedIdentities?.tokens} />
               <MintIdentity onClick={mint} />
             </div>
             <div>
