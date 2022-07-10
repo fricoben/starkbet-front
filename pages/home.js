@@ -1,7 +1,7 @@
 import Head from "next/head";
 import styles from "../styles/Home.module.css";
 import Button from "../components/button";
-import animationData from "../public/lottie-ethereum.json";
+import animationData from "../public/assets/lottie-ethereum.json";
 import Lottie from "../components/lottie";
 import { useConnectors, useStarknet } from "@starknet-react/core";
 import { useEffect } from "react";

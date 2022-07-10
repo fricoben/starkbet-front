@@ -7,7 +7,7 @@ const ErrorScreen = ({ errorButton, onClick }) => {
   return (
     <>
       <Image
-        src="/../public/memes/errorMeme.gif"
+        src="/../public/assets/errorMeme.gif"
         height={227}
         width={270}
         alt="error meme"
