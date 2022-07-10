@@ -221,11 +221,21 @@ export default function Discord() {
           />
         )}
         {successScreenCondition && (
-          <SuccessScreen
-            onClick={() => router.push(`/identities/${tokenId}`)}
-            successButton="Get back to you starknet identity"
-            successMessage="What a chad, you're discord is verified !"
-          />
+          <>
+            <SuccessScreen
+              onClick={() => router.push(`/identities/${tokenId}`)}
+              successButton="Get back to you starknet identity"
+              successMessage="What a chad, you're discord is verified !"
+            />
+            <p className="mt-2">
+              <a
+                className="footerLink"
+                href={`https://alpha4.starknet.io/feeder_gateway/get_transaction_receipt?transactionHash=${verifyData?.txid}`}
+              >
+                Check your transaction state
+              </a>
+            </p>
+          </>
         )}
         {discordIdSetterScreen && (
           <>
