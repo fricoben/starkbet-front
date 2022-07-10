@@ -164,7 +164,7 @@ export default function Discord() {
         body: JSON.stringify({
           reference: reference,
           type: "discord",
-          nftid: tokenId,
+          nftid: Number(tokenId),
         }),
       };
 
