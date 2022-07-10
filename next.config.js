@@ -8,4 +8,5 @@ module.exports = {
     }
     return config;
   },
+  images: ["https://starknetid.netlify.app", "https://starknet.id"],
 };
