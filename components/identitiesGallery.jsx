@@ -14,7 +14,7 @@ const IdentitiesGallery = ({ tokenIds }) => {
           <Image
             width={150}
             height={150}
-            src="/../public/assets/defaultAvatar.jpeg"
+            src="https://i.ibb.co/GRNr2xC/default-Avatar.jpg"
             alt="avatar"
             className={hoverState ? styles.avatarHover : styles.avatar}
             onMouseEnter={() => setHoverState(true)}

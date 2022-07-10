@@ -6,7 +6,7 @@ const SuccessScreen = ({ successButton, onClick, successMessage }) => {
   return (
     <div className="sm:w-2/3">
       <Image
-        src="/../public/assets/gigachad-chad.gif"
+        src="https://i.ibb.co/HhzL6JV/gigachad-chad.gif"
         height={400}
         width={236}
         alt="giga-chad"
