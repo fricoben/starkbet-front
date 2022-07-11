@@ -112,8 +112,8 @@ export default function Identities() {
         )}
         {minted === "true" && (
           <SuccessScreen
-            onClick={() => setMinted("false")}
-            successButton="Go back to your identities"
+            onClick={() => router.push(`/identities/${randomTokenId}`)}
+            successButton="Verify your discord identity now !"
             successMessage="What a chad, your starknet.id is minted !"
           />
         )}
