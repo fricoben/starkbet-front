@@ -34,15 +34,17 @@ export default function HomePage() {
               &quot;Be a Chad and own your on-chain identity&quot;
             </p>
             <div>
-              {connectors[0]?.available() ? (
-                <Button
-                  key={connectors[0].id()}
-                  onClick={() => connect(connectors[0])}
-                >
-                  Claim your Starknet.id
-                </Button>
-              ) : (
-                <div></div>
+              {connectors.map((connector) =>
+                connector.available() && connector.options.id === "argent-x" ? (
+                  <Button
+                    key={connector.id()}
+                    onClick={() => connect(connector)}
+                  >
+                    Claim your Starknet.id
+                  </Button>
+                ) : (
+                  <div></div>
+                )
               )}
             </div>
           </div>

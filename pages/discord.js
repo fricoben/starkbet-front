@@ -200,17 +200,19 @@ export default function Discord() {
       </Head>
 
       <div className={styles.container}>
-        {!isConnected && connectors[0]?.available() ? (
-          <>
-            <h1 className="sm:text-5xl text-5xl">You need to connect anon</h1>
-            <Button
-              key={connectors[0].id()}
-              onClick={() => connect(connectors[0])}
-            >
-              Connect Wallet
-            </Button>
-          </>
-        ) : null}
+        {!isConnected &&
+          connectors.map((connector) =>
+            connector.available() && connector.options.id === "argent-x" ? (
+              <>
+                <h1 className="sm:text-5xl text-5xl">
+                  You need to connect anon
+                </h1>
+                <Button key={connector.id()} onClick={() => connect(connector)}>
+                  Connect Wallet
+                </Button>
+              </>
+            ) : null
+          )}
         {loadingScreenCondition && <LoadingScreen />}
         {errorScreenCondition && (
           <ErrorScreen
