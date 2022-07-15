@@ -47,7 +47,7 @@ export default function Identities() {
     invoke({
       args: [[randomTokenId, 0]],
     });
-    setRightTokenId(rightTokenId);
+    setRightTokenId(randomTokenId);
   }
 
   useEffect(() => {
