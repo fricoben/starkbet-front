@@ -22,6 +22,7 @@ export default function Identities() {
   const [minted, setMinted] = useState("false");
   const randomTokenId = Math.floor(Math.random() * 100000000);
   const [ownedIdentities, setOwnedIdentities] = useState(undefined);
+  const [rightTokenId, setRightTokenId] = useState(undefined);
 
   // Connection
   const { disconnect, connectors } = useConnectors();
@@ -46,6 +47,7 @@ export default function Identities() {
     invoke({
       args: [[randomTokenId, 0]],
     });
+    setRightTokenId(rightTokenId);
   }
 
   useEffect(() => {
@@ -112,7 +114,7 @@ export default function Identities() {
         )}
         {minted === "true" && (
           <SuccessScreen
-            onClick={() => router.push(`/identities/${randomTokenId}`)}
+            onClick={() => router.push(`/identities/${rightTokenId}`)}
             successButton="Verify your discord identity now !"
             successMessage="What a chad, your starknet.id is minted !"
           />
