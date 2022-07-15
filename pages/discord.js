@@ -224,7 +224,7 @@ export default function Discord() {
           <>
             <SuccessScreen
               onClick={() => router.push(`/identities/${tokenId}`)}
-              successButton="Get back to you starknet identity"
+              successButton="Get back to your starknet identity"
               successMessage="What a chad, you're discord is verified !"
             />
             <p className="mt-2">
