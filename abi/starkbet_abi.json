@@ -1,0 +1,273 @@
+[
+    {
+        "members": [
+            {
+                "name": "low",
+                "offset": 0,
+                "type": "felt"
+            },
+            {
+                "name": "high",
+                "offset": 1,
+                "type": "felt"
+            }
+        ],
+        "name": "Uint256",
+        "size": 2,
+        "type": "struct"
+    },
+    {
+        "data": [
+            {
+                "name": "up",
+                "type": "felt"
+            },
+            {
+                "name": "owner",
+                "type": "felt"
+            },
+            {
+                "name": "key",
+                "type": "felt"
+            },
+            {
+                "name": "threshold",
+                "type": "felt"
+            },
+            {
+                "name": "betting_expiration",
+                "type": "felt"
+            },
+            {
+                "name": "expiration",
+                "type": "felt"
+            },
+            {
+                "name": "token_addr",
+                "type": "felt"
+            },
+            {
+                "name": "amount",
+                "type": "Uint256"
+            }
+        ],
+        "keys": [],
+        "name": "bet",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "name": "key",
+                "type": "felt"
+            },
+            {
+                "name": "target",
+                "type": "felt"
+            },
+            {
+                "name": "betting_expiration",
+                "type": "felt"
+            },
+            {
+                "name": "expiration",
+                "type": "felt"
+            },
+            {
+                "name": "token_contract",
+                "type": "felt"
+            }
+        ],
+        "name": "get_up_liquidity",
+        "outputs": [
+            {
+                "name": "amount",
+                "type": "Uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "key",
+                "type": "felt"
+            },
+            {
+                "name": "target",
+                "type": "felt"
+            },
+            {
+                "name": "betting_expiration",
+                "type": "felt"
+            },
+            {
+                "name": "expiration",
+                "type": "felt"
+            },
+            {
+                "name": "token_contract",
+                "type": "felt"
+            }
+        ],
+        "name": "get_down_liquidity",
+        "outputs": [
+            {
+                "name": "amount",
+                "type": "Uint256"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "key",
+                "type": "felt"
+            },
+            {
+                "name": "target",
+                "type": "felt"
+            },
+            {
+                "name": "betting_expiration",
+                "type": "felt"
+            },
+            {
+                "name": "expiration",
+                "type": "felt"
+            },
+            {
+                "name": "token_contract",
+                "type": "felt"
+            }
+        ],
+        "name": "get_bet_status",
+        "outputs": [
+            {
+                "name": "status",
+                "type": "felt"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "key",
+                "type": "felt"
+            },
+            {
+                "name": "target",
+                "type": "felt"
+            },
+            {
+                "name": "betting_expiration",
+                "type": "felt"
+            },
+            {
+                "name": "expiration",
+                "type": "felt"
+            },
+            {
+                "name": "token_contract",
+                "type": "felt"
+            },
+            {
+                "name": "amount",
+                "type": "Uint256"
+            }
+        ],
+        "name": "bet_up",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "key",
+                "type": "felt"
+            },
+            {
+                "name": "target",
+                "type": "felt"
+            },
+            {
+                "name": "betting_expiration",
+                "type": "felt"
+            },
+            {
+                "name": "expiration",
+                "type": "felt"
+            },
+            {
+                "name": "token_contract",
+                "type": "felt"
+            },
+            {
+                "name": "amount",
+                "type": "Uint256"
+            }
+        ],
+        "name": "bet_down",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "key",
+                "type": "felt"
+            },
+            {
+                "name": "target",
+                "type": "felt"
+            },
+            {
+                "name": "betting_expiration",
+                "type": "felt"
+            },
+            {
+                "name": "expiration",
+                "type": "felt"
+            },
+            {
+                "name": "token_contract",
+                "type": "felt"
+            }
+        ],
+        "name": "close_bet",
+        "outputs": [],
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "name": "key",
+                "type": "felt"
+            },
+            {
+                "name": "target",
+                "type": "felt"
+            },
+            {
+                "name": "betting_expiration",
+                "type": "felt"
+            },
+            {
+                "name": "expiration",
+                "type": "felt"
+            },
+            {
+                "name": "token_contract",
+                "type": "felt"
+            }
+        ],
+        "name": "redeem",
+        "outputs": [],
+        "type": "function"
+    }
+]

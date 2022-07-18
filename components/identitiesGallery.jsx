@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
-import styles from "../styles/Identities.module.css";
+import styles from "../styles/bets.module.css";
 
 const IdentitiesGallery = ({ tokenIds }) => {
   const [hoverState, setHoverState] = useState(false);

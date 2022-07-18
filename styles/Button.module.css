@@ -3,7 +3,7 @@
   border-radius: 5px;
   padding: 10px 25px;
   font-weight: 500;
-  background: #ff5008;
+  background: red;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
@@ -11,10 +11,10 @@
   box-shadow: 7px 7px 20px 0px black;
   outline: none;
   text-transform: uppercase;
-  margin-top: 2rem;
+  margin-top: 1rem;
 }
 
 .customBtn:hover {
-  color: #ff5008;
+  color: red;
   background: white;
 }

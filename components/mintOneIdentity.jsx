@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "../styles/Identities.module.css";
+import styles from "../styles/bets.module.css";
 import PlusIcon from "./icons/plusIcon";
 
 const mintIdentity = ({ onClick }) => {

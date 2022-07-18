@@ -1,5 +1,5 @@
 import Head from "next/head";
-import styles from "../styles/Identities.module.css";
+import styles from "../styles/bets.module.css";
 import { useConnectors, useStarknet } from "@starknet-react/core";
 import Button from "../components/button";
 import { useEffect } from "react";

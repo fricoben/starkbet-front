@@ -14,14 +14,15 @@
   align-items: center;
   margin-top: 2rem;
   max-height: 22rem;
-  max-width: 40rem;
-  overflow-y: auto;
+  max-width: 100%;
 }
 
 .clickableIcon {
   cursor: pointer;
   margin: 1rem;
   border-radius: 25%;
+  width: 150px;
+  height: 150px;
 }
 
 .clickablePlus {
@@ -60,4 +61,19 @@
   border-radius: 25%;
   border-width: 1rem;
   border-color: rgba(159, 139, 149, 0.18);
+}
+
+.letterIcon {
+  width: 150px;
+  font-size: 100px;
+  height: 150px;
+  margin: auto;
+}
+
+.betContainer {
+  margin-top: 2rem;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  background-color: rgba(159, 139, 149, 0.18);
+  width: 700px;
 }

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Head from "next/head";
-import styles from "../styles/Identities.module.css";
+import styles from "../styles/bets.module.css";
 import {
   useStarknet,
   useConnectors,
@@ -13,7 +13,7 @@ import { useRouter } from "next/router";
 import Button from "../components/button";
 import ErrorScreen from "../components/errorScreen";
 import LoadingScreen from "../components/loadingScreen";
-import { useStarknetIdContract } from "../hooks/starknetId";
+import { useStarknetIdContract } from "../hooks/starkBet";
 import { stringToFelt } from "../utils/felt";
 import SuccessScreen from "../components/successScreen";
 
