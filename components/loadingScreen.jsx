@@ -23,7 +23,7 @@ const LoadingScreen = ({ loadingMessage }) => {
         <MutatingDots
           height="100"
           width="100"
-          color="#ff5008"
+          color="green"
           secondaryColor="white"
           ariaLabel="loading"
         />

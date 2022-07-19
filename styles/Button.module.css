@@ -3,7 +3,7 @@
   border-radius: 5px;
   padding: 10px 25px;
   font-weight: 500;
-  background: red;
+  background: green;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
@@ -15,6 +15,6 @@
 }
 
 .customBtn:hover {
-  color: red;
+  color: green;
   background: white;
 }
