@@ -35,7 +35,7 @@ export default function HomePage() {
             </p>
             <div>
               {connectors.map((connector) =>
-                connector.available() && connector.options.id === "braavos" ? (
+                connector.available() && connector.options.id === "argent-x" ? (
                   <Button
                     key={connector.id()}
                     onClick={() => connect(connector)}
